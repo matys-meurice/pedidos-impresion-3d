@@ -21,8 +21,8 @@ if not st.session_state.auth:
 
 load_dotenv()
 
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
+url = os.getenv("SUPABASE_URL") or st.secrets["SUPABASE_URL"]
+key = os.getenv("SUPABASE_KEY") or st.secrets["SUPABASE_KEY"]
 
 supabase = create_client(url, key)
 

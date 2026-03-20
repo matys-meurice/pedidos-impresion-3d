@@ -3,10 +3,11 @@ from supabase import create_client, client
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+# Usar Secrets si está en Streamlit Cloud, sino .env en local
+url = os.getenv("SUPABASE_URL") or st.secrets["SUPABASE_URL"]
+key = os.getenv("SUPABASE_KEY") or st.secrets["SUPABASE_KEY"]
 
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
+load_dotenv()
 
 supabase: client = create_client(url, key)
 
