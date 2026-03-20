@@ -9,7 +9,7 @@ def enviar_email(destino, pedido, precio, id):
     user = os.getenv("EMAIL_USER") or st.secrets["EMAIL_USER"]
     password = os.getenv("EMAIL_PASS") or st.secrets["EMAIL_PASS"]
 
-    link = f"http://localhost:8501/confirmar?id={id}"
+    link = f"https://pedidos-impresion-3d-confirmar.streamlit.app"
 
     mensaje = f"""
     Tu pedido:
@@ -17,7 +17,7 @@ def enviar_email(destino, pedido, precio, id):
 
     Precio: {precio} €
 
-    Confirma aquí:
+    Confirma aquí tu id es {id}:
     {link}
     """
 
