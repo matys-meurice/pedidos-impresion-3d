@@ -3,6 +3,22 @@ from supabase import create_client
 from dotenv import load_dotenv
 import os
 
+# comprobar contraseña
+if "auth" not in st.session_state:
+    st.session_state.auth = False
+
+if not st.session_state.auth:
+    password = st.text_input("Contraseña", type="password")
+
+    if st.button("Entrar"):
+        if password == st.secrets["ADMIN_PASSWORD"]:
+            st.session_state.auth = True
+            st.rerun()
+        else:
+            st.error("Contraseña incorrecta")
+
+    st.stop()
+
 load_dotenv()
 
 url = os.getenv("SUPABASE_URL")
