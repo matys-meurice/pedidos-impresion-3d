@@ -75,10 +75,12 @@ if todos:
         # SI ESTA PENDIENTE → poner precio
         if todo["estado"] == "pendiente":
             precio = st.number_input(f"Precio ID {todo['id']}", key=f"precio_{todo['id']}")
+            fecha = st.date_input(f"Fecha de entrega {todo['id']}", key=f"Fecha{todo['id']}")
 
             if st.button(f"Enviar presupuesto {todo['id']}"):
                 supabase.table("todos").update({
                     "precio": precio,
+                    "fecha": fecha,
                     "estado": "presupuesto"
                 }).eq("id", todo["id"]).execute()
 
@@ -94,6 +96,8 @@ if todos:
 
         # SI ESTA CONFIRMADO → poner en impresión
         if todo["estado"] == "confirmado":
+            st.write(f"Nombre: "(todo['nombre']))
+            st.write(f"Lugar de entrega: "(todo['lugar']))
             if st.button(f"Marcar imprimiendo {todo['id']}"):
                 supabase.table("todos").update({
                     "estado": "imprimiendo"

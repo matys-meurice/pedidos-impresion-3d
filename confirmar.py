@@ -25,11 +25,12 @@ if id_input:
         pedido = response.data[0]
         st.write(f"**Modelo:** {pedido['pedido']}")
         st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
+        st.write(f"**Fecha de entrega(en el patio):** {pedido.get('Fecha')}")
         st.write(f"**Estado actual:** {pedido.get('estado', 'pendiente')}")
 
         # 🔹 Pide nombre y lugar de entrega
         nombre = st.text_input("Tu nombre")
-        lugar = st.text_input("Lugar de entrega (clase, patio, etc.)")
+        lugar = st.text_input("Lugar de entrega (clase, patio, calistenia, etc.)")
 
         if st.button("Confirmar pedido"):
             if not nombre or not lugar:
