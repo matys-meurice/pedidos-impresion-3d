@@ -96,8 +96,8 @@ if todos:
 
         # SI ESTA CONFIRMADO → poner en impresión
         if todo["estado"] == "confirmado":
-            st.write(f"Nombre: (todo['nombre'])")
-            st.write(f"Lugar de entrega: (todo['lugar'])")
+            st.write(f"Nombre: {todo['nombre']}")
+            st.write(f"Lugar de entrega: {todo['lugar']}")
             if st.button(f"Marcar imprimiendo {todo['id']}"):
                 supabase.table("todos").update({
                     "estado": "imprimiendo"
