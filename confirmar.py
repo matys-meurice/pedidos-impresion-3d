@@ -9,7 +9,7 @@ supabase: Client = create_client(url, key)
 
 st.title("Confirmar pedido")
 
-# 🔹 Pide el ID manualmente
+# 🔹 Input ID
 id_input = st.text_input("Introduce el ID del pedido")
 
 if id_input:
@@ -19,32 +19,50 @@ if id_input:
         st.error("ID no válido. Debe ser un número.")
         st.stop()
 
-    # 🔹 Obtener datos del pedido
+    # 🔹 Obtener pedido
     response = supabase.table("todos").select("*").eq("id", pedido_id).execute()
+
     if response.data:
         pedido = response.data[0]
+
+        #  SI YA ESTÁ CONFIRMADO
+        if pedido.get("estado") == "confirmado":
+            st.success("Este pedido ya ha sido confirmado ✅")
+
+            st.write(f"**Modelo:** {pedido['pedido']}")
+            st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
+            st.write(f"**Fecha de entrega:** {pedido.get('fecha', 'No definida')}")
+            st.write(f"**Lugar:** {pedido.get('lugar', 'No definido')}")
+            st.write(f"**Nombre:** {pedido.get('nombre', 'No definido')}")
+
+            st.info("Se entregará en el patio en la fecha indicada.")
+            st.stop()
+
+        #  MOSTRAR DATOS SI NO CONFIRMADO
         st.write(f"**Modelo:** {pedido['pedido']}")
         st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
-        st.write(f"**Fecha de entrega(en el patio):** {pedido.get('Fecha')}")
+        st.write(f"**Fecha de entrega (en el patio):** {pedido.get('fecha', 'No definida')}")
         st.write(f"**Estado actual:** {pedido.get('estado', 'pendiente')}")
 
-        # 🔹 Pide nombre y lugar de entrega
+        # 🔹 Formulario de confirmación
         nombre = st.text_input("Tu nombre")
-        lugar = st.text_input("Lugar de entrega (clase, patio, calistenia, etc.)")
+        lugar = st.text_input("Lugar de entrega (clase, patio, etc.)")
 
         if st.button("Confirmar pedido"):
             if not nombre or not lugar:
                 st.error("Debes poner tu nombre y lugar de entrega")
             else:
-                # 🔹 Actualizar pedido en Supabase
                 supabase.table("todos").update({
                     "estado": "confirmado",
                     "nombre": nombre,
                     "lugar": lugar
                 }).eq("id", pedido_id).execute()
 
-                st.success("Pedido confirmado ")
+                st.success("Pedido confirmado correctamente 🎉")
+                st.rerun()
+
     else:
         st.error("Pedido no encontrado")
+
 else:
     st.info("Introduce un ID para continuar")
