@@ -1,38 +1,49 @@
 import streamlit as st
-from supabase import create_client
-from dotenv import load_dotenv
+from supabase import create_client, Client
 import os
 
-load_dotenv()
-
+# 🔹 Conexión a Supabase
 url = os.getenv("SUPABASE_URL") or st.secrets["SUPABASE_URL"]
 key = os.getenv("SUPABASE_KEY") or st.secrets["SUPABASE_KEY"]
-
-supabase = create_client(url, key)
-
-# coger id de la URL
-id = st.query_params.get("id")
+supabase: Client = create_client(url, key)
 
 st.title("Confirmar pedido")
 
-if id:
-    # obtener datos del pedido
-    response = supabase.table("todos").select("*").eq("id", id).execute()
-    pedido = response.data[0]
+# 🔹 Pide el ID manualmente
+id_input = st.text_input("Introduce el ID del pedido")
 
-    st.write(f"Modelo: {pedido['pedido']}")
-    st.write(f"Precio: {pedido['precio']} €")
+if id_input:
+    try:
+        pedido_id = int(id_input)
+    except ValueError:
+        st.error("ID no válido. Debe ser un número.")
+        st.stop()
 
-    nombre = st.text_input("Tu nombre")
-    lugar = st.text_input("Lugar de entrega (clase, patio, etc.)")
+    # 🔹 Obtener datos del pedido
+    response = supabase.table("todos").select("*").eq("id", pedido_id).execute()
+    if response.data:
+        pedido = response.data[0]
+        st.write(f"**Modelo:** {pedido['pedido']}")
+        st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
+        st.write(f"**Estado actual:** {pedido.get('estado', 'pendiente')}")
 
-    if st.button("Confirmar pedido"):
-        supabase.table("todos").update({
-            "estado": "confirmado",
-            "nombre": nombre,
-            "lugar": lugar
-        }).eq("id", id).execute()
+        # 🔹 Pide nombre y lugar de entrega
+        nombre = st.text_input("Tu nombre")
+        lugar = st.text_input("Lugar de entrega (clase, patio, etc.)")
 
-        st.success("Pedido confirmado ✅")
+        if st.button("Confirmar pedido"):
+            if not nombre or not lugar:
+                st.error("Debes poner tu nombre y lugar de entrega")
+            else:
+                # 🔹 Actualizar pedido en Supabase
+                supabase.table("todos").update({
+                    "estado": "confirmado",
+                    "nombre": nombre,
+                    "lugar": lugar
+                }).eq("id", pedido_id).execute()
+
+                st.success("Pedido confirmado ")
+    else:
+        st.error("Pedido no encontrado")
 else:
-    st.error("ID no válido")
+    st.info("Introduce un ID para continuar")
