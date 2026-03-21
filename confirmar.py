@@ -27,7 +27,7 @@ if id_input:
 
         #  SI YA ESTÁ CONFIRMADO
         if pedido.get("estado") == "confirmado":
-            st.success("Este pedido ya ha sido confirmado ✅")
+            st.success("Este pedido ya ha sido confirmado")
 
             st.write(f"**Modelo:** {pedido['pedido']}")
             st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
@@ -37,6 +37,8 @@ if id_input:
 
             st.info("Se entregará en el patio en la fecha indicada.")
             st.stop()
+        elif pedido.get("estado") == "pendiente":
+            st.write(f"**El pedido ahun no ha sido revisado recibira un mail pronto**")
 
         #  MOSTRAR DATOS SI NO CONFIRMADO
         st.write(f"**Modelo:** {pedido['pedido']}")
