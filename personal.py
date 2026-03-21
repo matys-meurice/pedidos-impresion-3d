@@ -30,7 +30,7 @@ def enviar_email(destino, pedido, precio, id):
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login(user, password)
             server.send_message(msg)
-        print("Email enviado")
+        st.success("Email enviado")
     except Exception as e:
         st.error(f"Error enviando email: {e}")
 
