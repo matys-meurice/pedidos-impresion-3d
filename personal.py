@@ -34,6 +34,16 @@ def enviar_email(destino, pedido, precio, id):
     except Exception as e:
         st.error(f"Error enviando email: {e}")
 
+        st.subheader("Test email")
+
+    email_test = st.text_input("Tu email para probar")
+
+    if st.button("Enviar test"):
+        if email_test:
+            enviar_email(email_test, "modelo_test", 5, 123)
+        else:
+            st.error("Pon un email")
+
 if "auth" not in st.session_state:
     st.session_state.auth = False
 
