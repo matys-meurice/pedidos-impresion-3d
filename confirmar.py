@@ -48,16 +48,13 @@ if id_input:
 
         # 🔹 Formulario de confirmación
         nombre = st.text_input("Tu nombre")
-        lugar = st.text_input("Lugar de entrega (clase, patio, etc.)")
-
         if st.button("Confirmar pedido"):
-            if not nombre or not lugar:
+            if not nombre:
                 st.error("Debes poner tu nombre y lugar de entrega")
             else:
                 supabase.table("todos").update({
                     "estado": "confirmado",
                     "nombre": nombre,
-                    "lugar": lugar
                 }).eq("id", pedido_id).execute()
 
                 st.success("Pedido confirmado correctamente 🎉")
