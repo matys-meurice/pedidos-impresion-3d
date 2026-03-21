@@ -105,7 +105,6 @@ if todos:
                 )
 
                 st.success("Presupuesto enviado y email enviado")
-                st.rerun()
 
         # CONFIRMADO → pasar a imprimiendo
         if todo["estado"] == "confirmado":
