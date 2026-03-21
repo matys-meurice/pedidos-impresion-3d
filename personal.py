@@ -9,17 +9,17 @@ def enviar_email(destino, pedido, precio, id):
     user = os.getenv("EMAIL_USER") or st.secrets["EMAIL_USER"]
     password = os.getenv("EMAIL_PASS") or st.secrets["EMAIL_PASS"]
 
-    link = f"https://pedidos-impresion-3d-confirmar.streamlit.app"
+    link = "https://pedidos-impresion-3d-confirmar.streamlit.app"
 
     mensaje = f"""
-    Tu pedido:
-    {pedido}
+Tu pedido:
+{pedido}
 
-    Precio: {precio} €
+Precio: {precio} €
 
-    Confirma aquí tu id es {id}:
-    {link}
-    """
+Confirma aquí tu id es {id}:
+{link}
+"""
 
     msg = MIMEText(mensaje)
     msg['Subject'] = 'Confirmación impresión 3D'
@@ -34,7 +34,6 @@ def enviar_email(destino, pedido, precio, id):
     except Exception as e:
         print("Error enviando email:", e)
 
-# comprobar contraseña
 if "auth" not in st.session_state:
     st.session_state.auth = False
 
@@ -72,38 +71,51 @@ if todos:
         st.write(f"Modelo: {todo['pedido']}")
         st.write(f"Estado: {todo['estado']}")
 
-        # SI ESTA PENDIENTE → poner precio
+        # PENDIENTE → poner precio
         if todo["estado"] == "pendiente":
-            precio = st.number_input(f"Precio ID {todo['id']}", key=f"precio_{todo['id']}")
-            fecha = st.date_input(f"Fecha de entrega {todo['id']}", key=f"Fecha{todo['id']}")
+            precio = st.number_input(
+                f"Precio ID {todo['id']}",
+                key=f"precio_{todo['id']}"
+            )
+
+            fecha = st.date_input(
+                f"Fecha de entrega {todo['id']}",
+                key=f"fecha_{todo['id']}"
+            )
 
             if st.button(f"Enviar presupuesto {todo['id']}"):
+
+                if precio <= 0:
+                    st.error("Pon un precio válido")
+                    st.stop()
+
                 supabase.table("todos").update({
-                    "precio": precio,
-                    "fecha": fecha,
+                    "precio": float(precio),
+                    "fecha": str(fecha),
                     "estado": "presupuesto"
                 }).eq("id", todo["id"]).execute()
 
                 enviar_email(
                     todo["email"],
                     todo["pedido"],
-                    precio,
+                    float(precio),
                     todo["id"]
                 )
 
                 st.success("Presupuesto enviado y email enviado")
+                st.rerun()
 
-
-        # SI ESTA CONFIRMADO → poner en impresión
+        # CONFIRMADO → pasar a imprimiendo
         if todo["estado"] == "confirmado":
-            st.write(f"Nombre: {todo['nombre']}")
-            st.write(f"Lugar de entrega: {todo['lugar']}")
+            st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
+
             if st.button(f"Marcar imprimiendo {todo['id']}"):
                 supabase.table("todos").update({
                     "estado": "imprimiendo"
                 }).eq("id", todo["id"]).execute()
+                st.rerun()
 
-        # SI ESTA IMPRIMIENDO → borrar al terminar
+        # IMPRIMIENDO → eliminar
         if todo["estado"] == "imprimiendo":
             if st.button(f"Eliminar {todo['id']}"):
                 supabase.table("todos").delete().eq("id", todo["id"]).execute()

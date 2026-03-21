@@ -32,7 +32,7 @@ if id_input:
             st.write(f"**Modelo:** {pedido['pedido']}")
             st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
             st.write(f"**Fecha de entrega:** {pedido.get('fecha', 'No definida')}")
-            st.write(f"**Lugar:** {pedido.get('lugar', 'No definido')}")
+            st.write(f"**Lugar:** En el patio en las barras de calistenia.")
             st.write(f"**Nombre:** {pedido.get('nombre', 'No definido')}")
 
             st.info("Se entregará en el patio en la fecha indicada.")
