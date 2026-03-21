@@ -12,14 +12,14 @@ def enviar_email(destino, pedido, precio, id):
     link = "https://pedidos-impresion-3d-confirmar.streamlit.app"
 
     mensaje = f"""
-Tu pedido:
-{pedido}
+    Tu pedido:
+    {pedido}
 
-Precio: {precio} €
+    Precio: {precio} €
 
-Confirma aquí tu id es {id}:
-{link}
-"""
+    Confirma aquí tu id es {id}:
+    {link}
+    """
 
     msg = MIMEText(mensaje)
     msg['Subject'] = 'Confirmación impresión 3D'
@@ -32,7 +32,7 @@ Confirma aquí tu id es {id}:
             server.send_message(msg)
         print("Email enviado")
     except Exception as e:
-        print("Error enviando email:", e)
+        st.error(f"Error enviando email: {e}")
 
 if "auth" not in st.session_state:
     st.session_state.auth = False
