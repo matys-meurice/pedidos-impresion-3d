@@ -4,37 +4,48 @@ from dotenv import load_dotenv
 import os
 import smtplib
 from email.mime.text import MIMEText
+import smtplib
+from email.mime.text import MIMEText
+import os
+import streamlit as st
 
 def enviar_email(destino, pedido, precio, id):
-    user = os.getenv("EMAIL_USER") or st.secrets["EMAIL_USER"]
-    password = os.getenv("EMAIL_PASS") or st.secrets["EMAIL_PASS"]
+    user = os.getenv("EMAIL_USER")
+    password = os.getenv("EMAIL_PASS")
 
-    link = "https://pedidos-impresion-3d-confirmar.streamlit.app"
+    if not user or not password:
+        st.error("Faltan EMAIL_USER o EMAIL_PASS")
+        return False
+
+    link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/?id={id}"
 
     mensaje = f"""
-    Tu pedido:
-    {pedido}
+Hola 👋
 
-    Precio: {precio} €
+Tu pedido:
+{pedido}
 
-    Confirma aquí tu id es {id}:
-    {link}
-    """
+Precio: {precio} €
+
+Confirma aquí:
+{link}
+"""
 
     msg = MIMEText(mensaje)
-    msg['Subject'] = 'Confirmación impresión 3D'
-    msg['From'] = user
-    msg['To'] = destino
+    msg["Subject"] = "Confirmación impresión 3D"
+    msg["From"] = user
+    msg["To"] = destino
 
     try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
             server.login(user, password)
             server.send_message(msg)
-        st.success("Email enviado")
+
+        return True
+
     except Exception as e:
         st.error(f"Error enviando email: {e}")
-
-        st.subheader("Test email")
+        return False
 
 if "auth" not in st.session_state:
     st.session_state.auth = False
@@ -104,7 +115,6 @@ if todos:
                     todo["id"]
                 )
 
-                st.success("Presupuesto enviado y email enviado")
 
         # CONFIRMADO → pasar a imprimiendo
         if todo["estado"] == "confirmado":
