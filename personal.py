@@ -119,6 +119,7 @@ if todos:
         # CONFIRMADO → pasar a imprimiendo
         if todo["estado"] == "confirmado":
             st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
+            st.write(f"Fecha de entrga: {todo.get('fecha')}")
 
             if st.button(f"Marcar imprimiendo {todo['id']}"):
                 supabase.table("todos").update({
