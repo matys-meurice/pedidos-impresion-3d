@@ -4,10 +4,7 @@ from dotenv import load_dotenv
 import os
 import smtplib
 from email.mime.text import MIMEText
-import smtplib
-from email.mime.text import MIMEText
-import os
-import streamlit as st
+
 
 def enviar_email(destino, pedido, precio, id):
     user = os.getenv("EMAIL_USER")
