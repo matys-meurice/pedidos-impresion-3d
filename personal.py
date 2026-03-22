@@ -62,6 +62,11 @@ if not st.session_state.auth:
 
     st.stop()
 
+opcion = st.radio(
+    "Ver pedidos:",
+    ["Pendientes", "Confirmados", "Imprimiendo", "Por entregar"]
+)
+
 load_dotenv()
 
 url = os.getenv("SUPABASE_URL") or st.secrets["SUPABASE_URL"]
@@ -69,20 +74,28 @@ key = os.getenv("SUPABASE_KEY") or st.secrets["SUPABASE_KEY"]
 
 supabase = create_client(url, key)
 
-def get_todos():
-    response = supabase.table('todos').select('*').execute()
+def get_todos(estado):
+    response = supabase.table('todos').select('*').eq('estado', estado).execute()
     return response.data
 
 st.title("Panel de pedidos")
 
-todos = get_todos()
+if opcion == "Pendientes":
+    estado_filtrado = "pendiente"
+elif opcion == "Confirmados":
+    estado_filtrado = "confirmado"
+elif opcion == "Imprimiendo":
+    estado_filtrado = "imprimiendo"
+elif opcion == "Por entregar":
+    estado_filtrado = "por entregar"
 
-if todos:
+todos = get_todos(estado_filtrado)
+
+if todos:    
     for todo in todos:
         st.write("------")
         st.write(f"ID: {todo['id']}")
         st.write(f"Modelo: {todo['pedido']}")
-        st.write(f"Estado: {todo['estado']}")
 
         # PENDIENTE → poner precio
         if todo["estado"] == "pendiente":
