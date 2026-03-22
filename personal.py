@@ -10,15 +10,9 @@ def enviar_email(destino, pedido, precio, id):
     user = os.getenv("EMAIL_USER")
     password = os.getenv("EMAIL_PASS")
 
-    if not user or not password:
-        st.error("Faltan EMAIL_USER o EMAIL_PASS")
-        return False
-
-    link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/?id={id}"
+    link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/"
 
     mensaje = f"""
-Hola 👋
-
 Tu pedido:
 {pedido}
 
@@ -29,20 +23,14 @@ Confirma aquí:
 """
 
     msg = MIMEText(mensaje)
-    msg["Subject"] = "Confirmación impresión 3D"
-    msg["From"] = user
-    msg["To"] = destino
+    msg['Subject'] = 'Confirmación impresión 3D'
+    msg['From'] = user
+    msg['To'] = destino
 
-    try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(user, password)
-            server.send_message(msg)
-
-        return True
-
-    except Exception as e:
-        st.error(f"Error enviando email: {e}")
-        return False
+    with smtplib.SMTP("smtp.office365.com", 587) as server:
+        server.starttls()
+        server.login(user, password)
+        server.send_message(msg)
 
 if "auth" not in st.session_state:
     st.session_state.auth = False
@@ -121,7 +109,7 @@ if todos:
                 enviar_email(
                     todo["email"],
                     todo["pedido"],
-                    todo["precio"],
+                    precio,
                     todo["id"]
                 )
 
