@@ -147,8 +147,6 @@ if todos:
                 supabase.table("todos").delete().eq("id", todo["id"]).execute()
                 st.rerun()
 
-        else:
-            st.write("No se que coño a pasado.")
 
 
 else:
