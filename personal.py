@@ -4,42 +4,35 @@ from dotenv import load_dotenv
 import os
 import smtplib
 from email.mime.text import MIMEText
+from resend import Resend
+
+client = Resend(api_key=st.secrets["RESEND_API_KEY"])
 
 
-def enviar_email(destino, pedido, precio, id):
+def enviar_email_resend(destino, pedido, precio, id):
     try:
-        user = st.secrets["EMAIL_USER"]
-        password = st.secrets["EMAIL_PASS"]
-
-        st.write("USER:", user)  # debug
-        st.write("PASS:", "OK" if password else "VACIO")
-
         link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/?id={id}"
 
-        mensaje = f"""
-Tu pedido:
-{pedido}
+        html_content = f"""
+        <p>Tu pedido:</p>
+        <p>{pedido}</p>
+        <p>Precio: {precio} €</p>
+        <p>Confirma aquí: <a href="{link}">{link}</a></p>
+        """
 
-Precio: {precio} €
+        response = client.emails.send(
+            from_="Imprint Tienda 3D <hola@resend.com>", 
+            to=[destino],
+            subject="Confirmación de tu pedido 3D",
+            html=html_content
+        )
 
-Confirma aquí:
-{link}
-"""
-
-        msg = MIMEText(mensaje)
-        msg['Subject'] = 'Confirmación impresión 3D'
-        msg['From'] = user
-        msg['To'] = destino
-
-        with smtplib.SMTP("smtp.office365.com", 587) as server:
-            server.starttls()
-            server.login(user, password)
-            server.send_message(msg)
-
-        st.success("Email enviado")
+        st.success(f"Email enviado a {destino}")
 
     except Exception as e:
-        st.error(f"ERROR REAL: {e}")
+        st.error(f"Error enviando email: {e}")
+
+
 if "auth" not in st.session_state:
     st.session_state.auth = False
 
@@ -114,7 +107,7 @@ if todos:
                     "estado": "presupuesto"
                 }).eq("id", todo["id"]).execute()
 
-                enviar_email(
+                enviar_email_resend(
                     todo["email"],
                     todo["pedido"],
                     precio,
