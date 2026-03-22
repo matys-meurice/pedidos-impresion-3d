@@ -7,8 +7,8 @@ from email.mime.text import MIMEText
 
 
 def enviar_email(destino, pedido, precio, id):
-    user = os.getenv("EMAIL_USER")
-    password = os.getenv("EMAIL_PASS")
+    user = st.secrets["EMAIL_USER"]
+    password = st.secrets["EMAIL_PASS"]
 
     link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/"
 
