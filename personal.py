@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 import os
 import smtplib
 from email.mime.text import MIMEText
-from resend import Resend
+from resend import Client
 
-client = Resend(api_key=st.secrets["RESEND_API_KEY"])
+client = Client(api_key=st.secrets["RESEND_API_KEY"])
 
 def enviar_email_resend(destino, pedido, precio, id):
     """
@@ -32,8 +32,8 @@ def enviar_email_resend(destino, pedido, precio, id):
         """
 
         # Envía el email
-        response = client.emails.send(
-            from_="Imprint Tienda 3D <hola@resend.com>",  # Cambia el "from" si quieres
+        client.emails.send(
+            from_="Imprint Tienda 3D <hola@resend.com>",
             to=[destino],
             subject="Confirmación de tu pedido 3D",
             html=html_content
