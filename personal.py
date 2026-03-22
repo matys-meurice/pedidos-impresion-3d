@@ -117,7 +117,7 @@ if todos:
 
 
         # CONFIRMADO → pasar a imprimiendo
-        elif todo["estado"] == "confirmado":
+        if todo["estado"] == "confirmado":
             st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
             st.write(f"Fecha de entrga: {todo.get('fecha')}")
 
@@ -128,7 +128,7 @@ if todos:
                 st.rerun()
 
         # IMPRIMIENDO → por entregar
-        elif todo["estado"] == "imprimiendo":
+        if todo["estado"] == "imprimiendo":
             st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
             st.write(f"Fecha de entrga: {todo.get('fecha')}")
 
@@ -140,7 +140,7 @@ if todos:
 
 
         # Por entregar → eliminar
-        elif todo["estado"] == "por entregar":
+        if todo["estado"] == "por entregar":
             st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
             st.write(f"Fecha de entrga: {todo.get('fecha')}")
             if st.button(f"Eliminar (entregado) {todo['id']}"):
