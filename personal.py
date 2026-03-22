@@ -117,7 +117,7 @@ if todos:
 
 
         # CONFIRMADO → pasar a imprimiendo
-        if todo["estado"] == "confirmado":
+        elif todo["estado"] == "confirmado":
             st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
             st.write(f"Fecha de entrga: {todo.get('fecha')}")
 
@@ -127,11 +127,29 @@ if todos:
                 }).eq("id", todo["id"]).execute()
                 st.rerun()
 
-        # IMPRIMIENDO → eliminar
-        if todo["estado"] == "imprimiendo":
-            if st.button(f"Eliminar {todo['id']}"):
+        # IMPRIMIENDO → por entregar
+        elif todo["estado"] == "confirmado":
+            st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
+            st.write(f"Fecha de entrga: {todo.get('fecha')}")
+
+            if st.button(f"Marcar por entregar {todo['id']}"):
+                supabase.table("todos").update({
+                    "estado": "por entregar"
+                }).eq("id", todo["id"]).execute()
+                st.rerun()
+
+
+        # Por entregar → eliminar
+        elif todo["estado"] == "por entregar":
+            st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
+            st.write(f"Fecha de entrga: {todo.get('fecha')}")
+            if st.button(f"Eliminar (entregado) {todo['id']}"):
                 supabase.table("todos").delete().eq("id", todo["id"]).execute()
                 st.rerun()
+
+        else:
+            st.write("No se que coño a pasado.")
+
 
 else:
     st.write("No hay pedidos")
