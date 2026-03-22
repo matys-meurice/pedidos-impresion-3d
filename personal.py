@@ -128,7 +128,7 @@ if todos:
                 st.rerun()
 
         # IMPRIMIENDO → por entregar
-        elif todo["estado"] == "confirmado":
+        elif todo["estado"] == "imprimiendo":
             st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
             st.write(f"Fecha de entrga: {todo.get('fecha')}")
 
