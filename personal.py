@@ -7,12 +7,16 @@ from email.mime.text import MIMEText
 
 
 def enviar_email(destino, pedido, precio, id):
-    user = st.secrets["EMAIL_USER"]
-    password = st.secrets["EMAIL_PASS"]
+    try:
+        user = st.secrets["EMAIL_USER"]
+        password = st.secrets["EMAIL_PASS"]
 
-    link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/"
+        st.write("USER:", user)  # debug
+        st.write("PASS:", "OK" if password else "VACIO")
 
-    mensaje = f"""
+        link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/?id={id}"
+
+        mensaje = f"""
 Tu pedido:
 {pedido}
 
@@ -22,16 +26,20 @@ Confirma aquí:
 {link}
 """
 
-    msg = MIMEText(mensaje)
-    msg['Subject'] = 'Confirmación impresión 3D'
-    msg['From'] = user
-    msg['To'] = destino
+        msg = MIMEText(mensaje)
+        msg['Subject'] = 'Confirmación impresión 3D'
+        msg['From'] = user
+        msg['To'] = destino
 
-    with smtplib.SMTP("smtp.office365.com", 587) as server:
-        server.starttls()
-        server.login(user, password)
-        server.send_message(msg)
+        with smtplib.SMTP("smtp.office365.com", 587) as server:
+            server.starttls()
+            server.login(user, password)
+            server.send_message(msg)
 
+        st.success("Email enviado")
+
+    except Exception as e:
+        st.error(f"ERROR REAL: {e}")
 if "auth" not in st.session_state:
     st.session_state.auth = False
 
