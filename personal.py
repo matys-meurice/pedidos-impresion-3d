@@ -4,26 +4,43 @@ from dotenv import load_dotenv
 import os
 import smtplib
 from email.mime.text import MIMEText
-import resend
+from resend import Resend
 
-client = resend(api_key=st.secrets["RESEND_API_KEY"])
+client = Resend(api_key=st.secrets["RESEND_API_KEY"])
 
 def enviar_email_resend(destino, pedido, precio, id):
-    link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/?id={id}"
-    html_content = f"""
-    <p>Tu pedido:</p>
-    <p>{pedido}</p>
-    <p>Precio: {precio} €</p>
-    <p>Confirma aquí: <a href="{link}">{link}</a></p>
     """
+    Envía un email de confirmación de pedido usando Resend.
+
+    Parámetros:
+    - destino: str -> correo del cliente
+    - pedido: str -> descripción o URL del modelo
+    - precio: float -> precio del pedido
+    - id: int -> ID del pedido (para el link de confirmación)
+    """
+
     try:
+        # Link de confirmación del pedido
+        link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/?id={id}"
+
+        # Contenido HTML del email
+        html_content = f"""
+        <p>Tu pedido:</p>
+        <p>{pedido}</p>
+        <p>Precio: {precio} €</p>
+        <p>Confirma aquí: <a href="{link}">{link}</a></p>
+        """
+
+        # Envía el email
         response = client.emails.send(
-            from_="Imprint Tienda 3D <hola@resend.com>",
+            from_="Imprint Tienda 3D <hola@resend.com>",  # Cambia el "from" si quieres
             to=[destino],
             subject="Confirmación de tu pedido 3D",
             html=html_content
         )
-        st.success(f"Email enviado a {destino}")
+
+        st.success(f"Email enviado correctamente a {destino}")
+
     except Exception as e:
         st.error(f"Error enviando email: {e}")
 
