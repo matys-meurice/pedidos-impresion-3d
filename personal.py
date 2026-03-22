@@ -6,7 +6,7 @@ import smtplib
 from email.mime.text import MIMEText
 import resend
 
-client = resend.Client(api_key=st.secrets["RESEND_API_KEY"])
+client = resend.Client(api_key=st.secrets["general"]["RESEND_API_KEY"])
 
 def enviar_email_resend(destino, pedido, precio, id):
     link = f"https://pedidos-impresion-3d-confirmar.streamlit.app/?id={id}"
