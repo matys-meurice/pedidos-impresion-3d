@@ -50,8 +50,6 @@ if opcion == "Pendientes":
     estado_filtrado = "pendiente"
 elif opcion == "Confirmados":
     estado_filtrado = "confirmado"
-elif opcion == "Imprimiendo":
-    estado_filtrado = "imprimiendo"
 elif opcion == "Por entregar":
     estado_filtrado = "por entregar"
 
@@ -95,23 +93,11 @@ if todos:
             st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
             st.write(f"Fecha de entrga: {todo.get('fecha')}")
 
-            if st.button(f"Marcar imprimiendo {todo['id']}"):
-                supabase.table("todos").update({
-                    "estado": "imprimiendo"
-                }).eq("id", todo["id"]).execute()
-                st.rerun()
-
-        # IMPRIMIENDO → por entregar
-        if todo["estado"] == "imprimiendo":
-            st.write(f"Nombre: {todo.get('nombre', 'Sin nombre')}")
-            st.write(f"Fecha de entrga: {todo.get('fecha')}")
-
             if st.button(f"Marcar por entregar {todo['id']}"):
                 supabase.table("todos").update({
                     "estado": "por entregar"
                 }).eq("id", todo["id"]).execute()
                 st.rerun()
-
 
         # Por entregar → eliminar
         if todo["estado"] == "por entregar":
