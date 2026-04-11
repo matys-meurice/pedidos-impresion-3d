@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 import os
 
 
-client = Client(api_key=st.secrets["RESEND_API_KEY"])
-
 def enviar_email_resend(destino, pedido, precio, id):
     st.success("El pedido ha sido confirmado")
     st.write(f"**Modelo:** {pedido['pedido']}")
