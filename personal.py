@@ -4,12 +4,12 @@ from dotenv import load_dotenv
 import os
 
 
-def enviar_email_resend(destino, pedido, precio, id):
+def enviar_email_resend(pedido):
     st.success("El pedido ha sido confirmado")
-    st.write(f"**Modelo:** {pedido['pedido']}")
+    st.write(f"**Modelo:** {pedido}")
     st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
     st.write(f"**Fecha de entrega:** {pedido.get('fecha', 'No definida')}")
-    st.write(f"**Lugar:** En el patio en las barras de calistenia.")
+    st.write(f"**Lugar:** En el patio en las barras de calistenia.O envia justificante")
     st.write(f"**Nombre:** {pedido.get('nombre', 'No definido')}")
 
 
@@ -87,12 +87,7 @@ if todos:
                     "estado": "presupuesto"
                 }).eq("id", todo["id"]).execute()
 
-                enviar_email_resend(
-                    todo["email"],
-                    todo["pedido"],
-                    precio,
-                    todo["id"]
-                )
+                enviar_email_resend(todo)
 
 
         # CONFIRMADO → pasar a imprimiendo
