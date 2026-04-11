@@ -17,15 +17,22 @@ def add_todo(pedido):
 st.title("Pedir impresiones 3D")
 
 email = st.text_input("Tu email")
-pedido = st.text_input("URL del modelo")
+pedido = st.text_input(
+    "Modelo (URL o nombre)",
+    help="Puedes poner un enlace o un producto del catálogo(nombre)"
+)
 
+especificaciones = st.text_input(
+    "Especificaciones",
+    help="Ej: tamaño(no obigatorio), color, como es (de los personalizados)..."
+)
 if st.button("Pedir"):
     if pedido and email:
         supabase.table('todos').insert({
             'pedido': pedido,
             'email': email,
+            'especificaciones': especificaciones,
             'estado': 'pendiente'
         }).execute()
-        st.success("¡Ya has pedido!")
-    else:
+        st.success(f"¡Ya has pedido!\nEl id de su pedido es {pedido['id']}\nPara ver el estado de su pedido mire en:\nhttps://pedidos-impresion-3d-confirmar.streamlit.app/")
         st.error("Rellena todo")

@@ -39,6 +39,7 @@ if id_input:
             st.stop()
         elif pedido.get("estado") == "pendiente":
             st.write(f"**El pedido ahun no ha sido revisado recibira un mail pronto**")
+            st.stop
 
         #  MOSTRAR DATOS SI NO CONFIRMADO
         st.write(f"**Modelo:** {pedido['pedido']}")
@@ -57,7 +58,7 @@ if id_input:
                     "nombre": nombre,
                 }).eq("id", pedido_id).execute()
 
-                st.success("Pedido confirmado correctamente 🎉")
+                st.success("Pedido confirmado correctamente ")
                 st.rerun()
 
     else:
