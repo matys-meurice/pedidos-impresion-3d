@@ -30,7 +30,7 @@ if not st.session_state.auth:
 
 opcion = st.radio(
     "Ver pedidos:",
-    ["Pendientes", "Confirmados", "Imprimiendo", "Por entregar"]
+    ["Pendientes", "Confirmados", "Por entregar"]
 )
 
 load_dotenv()
