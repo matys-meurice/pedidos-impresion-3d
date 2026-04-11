@@ -28,9 +28,6 @@ if not st.session_state.auth:
 
     st.stop()
 
-if st.button("actualizar"):
-    st.rerun
-
 opcion = st.radio(
     "Ver pedidos:",
     ["Pendientes", "Confirmados", "Por entregar"]

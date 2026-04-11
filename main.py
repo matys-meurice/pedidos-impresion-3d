@@ -16,9 +16,6 @@ def add_todo(pedido):
 
 st.title("Pedir impresiones 3D")
 
-if st.button("actualizar"):
-    st.rerun
-
 email = st.text_input("Tu email")
 pedido = st.text_input(
     "Modelo (URL o nombre)",
