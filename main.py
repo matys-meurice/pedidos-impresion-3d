@@ -28,11 +28,20 @@ especificaciones = st.text_input(
 )
 if st.button("Pedir"):
     if pedido and email:
-        supabase.table('todos').insert({
+        response = supabase.table('todos').insert({
             'pedido': pedido,
             'email': email,
             'especificaciones': especificaciones,
             'estado': 'pendiente'
         }).execute()
-        st.success(f"¡Ya has pedido!\nEl id de su pedido es {pedido['id']}\nPara ver el estado de su pedido mire en:\nhttps://pedidos-impresion-3d-confirmar.streamlit.app/")
+
+        pedido_id = response.data[0]['id']
+        
+        st.success(f"""¡Ya has pedido!  
+            El id de su pedido es {pedido_id}  
+
+            Para ver el estado de su pedido mire en:  
+            https://pedidos-impresion-3d-confirmar.streamlit.app/
+            """)
+    else:
         st.error("Rellena todo")
