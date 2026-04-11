@@ -23,7 +23,7 @@ pedido = st.text_input(
 )
 
 especificaciones = st.text_input(
-    "Especificaciones",
+    "Especificaciones (si no especifica bien despues no nos hacemos responsables)",
     help="Ej: tamaño(no obigatorio), color, como es (de los personalizados)..."
 )
 if st.button("Pedir"):
