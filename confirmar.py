@@ -45,6 +45,7 @@ if id_input:
         st.write(f"**Modelo:** {pedido['pedido']}")
         st.write(f"**Precio:** {pedido.get('precio', 'N/A')} €")
         st.write(f"**Fecha de entrega (en el patio):** {pedido.get('fecha', 'No definida')}")
+        st.write(f"**Lugar:** En el patio en las barras de calistenia. si necesitas otro envianos un mail con justificante.")
         st.write(f"**Estado actual:** {pedido.get('estado', 'pendiente')}")
 
         # 🔹 Formulario de confirmación
