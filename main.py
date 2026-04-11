@@ -39,8 +39,8 @@ if st.button("Pedir"):
         
         st.success(f"""¡Ya has pedido!  
             El id de su pedido es {pedido_id}  
-
-            Para ver el estado de su pedido mire en:  
+            Para ver el estado de su pedido mire en:
+              
             https://pedidos-impresion-3d-confirmar.streamlit.app/
             """)
     else:
