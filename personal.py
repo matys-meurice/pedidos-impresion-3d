@@ -2,9 +2,7 @@ import streamlit as st
 from supabase import create_client
 from dotenv import load_dotenv
 import os
-import smtplib
-from email.mime.text import MIMEText
-from resend import Client
+
 
 client = Client(api_key=st.secrets["RESEND_API_KEY"])
 
