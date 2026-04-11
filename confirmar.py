@@ -9,6 +9,9 @@ supabase: Client = create_client(url, key)
 
 st.title("Confirmar pedido")
 
+if st.button("actualizar"):
+    st.rerun
+
 # 🔹 Input ID
 id_input = st.text_input("Introduce el ID del pedido")
 
