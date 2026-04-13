@@ -26,6 +26,12 @@ especificaciones = st.text_input(
     "Especificaciones (si no especifica bien despues no nos hacemos responsables)",
     help="Ej: tamaño(no obigatorio), color, como es (de los personalizados)..."
 )
+
+st.text("""Consulta el catalogo en:
+        
+
+        """)
+
 if st.button("Pedir"):
     if pedido and email:
         response = supabase.table('todos').insert({
